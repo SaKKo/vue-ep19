@@ -45,8 +45,19 @@ export default {
       results: []
     }
   },
+  async fetch() {
+    const q = this.$route.query.q
+    this.query = q
+    if (q && q.length >= 3) {
+      const url = `https://api.jikan.moe/v3/search/manga?q=${q}&page=1`
+      const res = await axios.get(url)
+      this.results = res.data.results
+      console.log('RES.DATA.RESULTS', res.data.results.length)
+    }
+  },
   methods: {
     handleSearchManga() {
+      this.$router.replace({ name: 'manga-search', query: { q: this.query } })
       const url = `https://api.jikan.moe/v3/search/manga?q=${this.query}&page=1`
       axios.get(url).then((res) => {
         console.log(res.data)
